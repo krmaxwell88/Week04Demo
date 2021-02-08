@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import models.Person;
 
 
 public class helloWorldServlet extends HttpServlet {
@@ -34,12 +35,15 @@ public class helloWorldServlet extends HttpServlet {
         String firstname = request.getParameter("first_name");
         String lastname = request.getParameter("last_name");
         
-        // set attributes, in this case they will be used in the JSP.
-        request.setAttribute("firstName",firstname);
-        request.setAttribute("lastName",lastname);
+        
         
         // If the form has not been filled out correctly...
         if( firstname == null || firstname.equals("") || lastname == null || lastname.equals("") ){
+            
+            // set attributes, in this case they will be used in the JSP.
+            request.setAttribute("firstName",firstname);
+            request.setAttribute("lastName",lastname);
+            
             // A helpful message to the user, letting them know what went wrong.
             request.setAttribute("message", "Please enter both a first and last name.");
             //call the form once again, so the user can re-fill the fields
@@ -50,6 +54,9 @@ public class helloWorldServlet extends HttpServlet {
             return;
         }
 
+        Person person = new Person(firstname, lastname);
+        request.setAttribute("person", person);
+        
         // if the form has been filled out correctly, show the sayHello JSP
         getServletContext().getRequestDispatcher("/WEB-INF/sayHello.jsp")
                 .forward(request, response);
